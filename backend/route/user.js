@@ -68,35 +68,38 @@ const signinbody=zod.object({
 
 
 router.post('/signin',async (req,res)=>{
-const {success} = signinbody.safeParse(req.body);
-if(!success){
-   return res.status(400).json({
-        message:"invalid credintial type"
+    try {
+        
+        const {success} = signinbody.safeParse(req.body);
+        if(!success){
+           return res.status(400).json({
+                message:"invalid credintial type"
+            }
+            )
+        }
+        
+        const  User = await user.findOne({
+            username:req.body.username,
+            password:req.body.password
+        
+        })
+         if ( User) {
+            const token = jwt.sign({ userid: User._id}, JWT_SECRET);
+            console.log("userid is"+User._id)
+             res.status(200).json({ msg:"user signed in successfully", token: token })
+            return;
+        }
+        
+        
+        res.status(400).json({
+            message: "Error while logging in"
+        })
+    } catch (error) {
+        res.status(400).json({
+            msg:"error while singin"
+        })
     }
-    )
-}
 
-const  User = await user.findOne({
-    username:req.body.username,
-    password:req.body.password
-
-})
- if ( User) {
-    const token = jwt.sign({
-        userid: User._id
- }, JWT_SECRET);
-console.log("userid is"+User._id)
-     res.status(200).json({
-        msg:"user signed in successfully",
-        token: token
-    })
-    return;
-}
-
-
-res.status(400).json({
-    message: "Error while logging in"
-})
 
 })
 

@@ -1,7 +1,8 @@
+require('dotenv').config();
 const mongoose = require('mongoose');
 
 // Connect to MongoDB
-mongoose.connect('mongodb+srv://pranavhore1455:Pranav%402003@cluster0.jgvyr0h.mongodb.net/paytm-lite', {
+mongoose.connect(process.env.temp_db, {
   useNewUrlParser: true,
   useUnifiedTopology: true
  }).then(() => {
@@ -51,8 +52,25 @@ const accountSchema = new Schema({
     required: true
   }
 });
-
 // Define the account model
 const account = mongoose.model('Account', accountSchema);
 
-module.exports = { user, account };
+
+
+const groupSchema = new Schema({
+  name: { type: String, required: true },
+  members: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }],
+  expenses: [{
+    description: String,
+    amount: Number,
+    paidBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    splitAmong: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+    settledMembers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+    individualShare:{type:Number},
+    settled: { type: Boolean, default: false }
+  }]
+});
+
+const group = mongoose.model('Group', groupSchema);
+
+module.exports = { user, account ,group};
