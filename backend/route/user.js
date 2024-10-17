@@ -45,14 +45,14 @@ const userid=newuser._id
 
 await account.create({
     userid:userid,
-    balance:(10000*Math.random()).toFixed(2)
+    balance:(100000*Math.random()).toFixed(2)
 })
 
 
 const token = jwt.sign({
     userid
 }, JWT_SECRET);
- 
+
 
     res.json({
         message: "User created successfully",

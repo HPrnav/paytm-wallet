@@ -60,6 +60,7 @@ const account = mongoose.model('Account', accountSchema);
 const groupSchema = new Schema({
   name: { type: String, required: true },
   members: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }],
+  createdBy:{type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true},
   expenses: [{
     description: String,
     amount: Number,

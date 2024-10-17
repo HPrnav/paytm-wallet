@@ -6,7 +6,6 @@ import { useRef } from "react";
 import { Receipt } from "./Receipt";
 import generatePDF from"react-to-pdf"
 
-
 export const SendMoney=()=>{
     const targetref=useRef();
 
